@@ -1,0 +1,76 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Cart</h1>
+      <p class="subtitle">
+        {{ totalQuantity() }} item{{ totalQuantity() === 1 ? '' : 's' }} in your cart.
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <a class="btn outline" [routerLink]="['/products']">
+        Back to Products
+      </a>
+      <button
+        class="btn danger"
+        type="button"
+        (click)="clear()"
+        [disabled]="items().length === 0"
+      >
+        Clear Cart
+      </button>
+    </div>
+  </header>
+
+  <div *ngIf="items().length; else empty" class="card">
+    <div class="cart-item" *ngFor="let item of items()">
+      <div class="info">
+        <h2>{{ item.product.name }}</h2>
+        <p class="category">{{ item.product.category }}</p>
+        <p class="description">{{ item.product.description }}</p>
+      </div>
+
+      <div class="controls">
+        <div class="qty">
+          <button type="button" (click)="decrease(item.product.id)">−</button>
+          <span>{{ item.quantity }}</span>
+          <button type="button" (click)="increase(item.product.id)">+</button>
+        </div>
+        <div class="price">
+          <span>
+            ₹{{ item.product.price | number : '1.0-0' }}
+          </span>
+          <span class="subtotal">
+            Subtotal:
+            ₹{{ item.product.price * item.quantity | number : '1.0-0' }}
+          </span>
+        </div>
+        <button
+          class="link-button"
+          type="button"
+          (click)="remove(item.product.id)"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+
+    <footer class="summary">
+      <div>
+        <p>Total items: {{ totalQuantity() }}</p>
+        <p class="total">
+          Total: ₹{{ totalPrice() | number : '1.0-0' }}
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <ng-template #empty>
+    <p class="empty-state">
+      Your cart is empty.
+      <a [routerLink]="['/products']">Browse products</a> to add items.
+    </p>
+  </ng-template>
+</section>
+
+

@@ -1,0 +1,79 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Products</h1>
+      <p class="subtitle">Browse, manage, and add products to your cart.</p>
+    </div>
+
+    <div class="header-actions">
+      <input
+        class="search-input"
+        type="search"
+        placeholder="Search by name, category, description"
+        [value]="search()"
+        (input)="onSearch($any($event.target).value)"
+      />
+
+      <a class="btn primary" [routerLink]="['/products/new']">
+        + Add Product
+      </a>
+
+      <a class="btn outline" [routerLink]="['/cart']">
+        Cart
+      </a>
+    </div>
+  </header>
+
+  <div class="table-wrapper" *ngIf="filteredProducts().length; else empty">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th class="numeric">Price</th>
+          <th>Description</th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of filteredProducts()">
+          <td>{{ product.name }}</td>
+          <td>{{ product.category }}</td>
+          <td class="numeric">
+            ₹{{ product.price | number : '1.0-0' }}
+          </td>
+          <td class="description">
+            {{ product.description }}
+          </td>
+          <td class="actions">
+            <button class="btn small" type="button" (click)="addToCart(product)">
+              Add to Cart
+            </button>
+            <a
+              class="btn small outline"
+              [routerLink]="['/products', product.id, 'edit']"
+            >
+              Edit
+            </a>
+            <button
+              class="btn small danger"
+              type="button"
+              (click)="delete(product)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #empty>
+    <p class="empty-state">
+      No products found. Try changing your search or
+      <a [routerLink]="['/products/new']">add a new product</a>.
+    </p>
+  </ng-template>
+</section>
+
+
